@@ -1,20 +1,20 @@
 package com.pragmatists.eventsourcing.memory;
 
 
+import com.pragmatists.eventsourcing.api.AggregateId;
 import com.pragmatists.eventsourcing.api.Event;
 import com.pragmatists.eventsourcing.api.EventStore;
-import com.pragmatists.eventsourcing.api.store.EventStream;
+import com.pragmatists.eventsourcing.api.EventStream;
 
 import java.util.List;
-import java.util.UUID;
 
 public class InMemoryEventStore<V> implements EventStore<V> {
 
-    public EventStream<Long> loadEventStream(UUID aggregateId) {
+    public EventStream<Long> loadEventStream(AggregateId aggregateId) {
         return null;
     }
 
-    public void store(UUID aggregateId, long version, List<Event> events) {
+    public void store(AggregateId aggregateId, long version, List<Event> events) {
 
     }
 

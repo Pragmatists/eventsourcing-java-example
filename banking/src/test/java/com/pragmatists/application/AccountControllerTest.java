@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class AccountEndpointTest {
+public class AccountControllerTest {
 
     @Autowired
     TestRestTemplate restTemplate;
@@ -59,6 +59,7 @@ public class AccountEndpointTest {
 
         assertThat(getAccount(accountId).getBalance()).isEqualTo("-10");
     }
+
 
     private HttpEntity<MultiValueMap<String, Object>> request(RequestParameter ...requestParameter) {
         HttpHeaders headers = new HttpHeaders();
