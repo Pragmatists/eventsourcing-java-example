@@ -5,7 +5,11 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -13,6 +17,10 @@ import org.springframework.util.MultiValueMap;
 import java.net.URI;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.NO_CONTENT;
+import static org.springframework.http.HttpStatus.OK;
 
 
 @RunWith(SpringRunner.class)
@@ -26,7 +34,7 @@ public class AccountControllerTest {
     public void create_account() {
         ResponseEntity<String> response = createAccount(request(param("owner", "john.doe@example.com")));
 
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        assertThat(response.getStatusCode()).isEqualTo(CREATED);
         assertThat(response.getHeaders().getLocation()).isNotNull();
     }
 
@@ -34,12 +42,25 @@ public class AccountControllerTest {
     public void get_account() {
         ResponseEntity<String> response = createAccount(request(param("owner", "john.doe@example.com")));
 
-        AccountResource accountResource = getAccount(response.getHeaders().getLocation());
+        ResponseEntity<AccountResource> accountResponse = getAccount(response.getHeaders().getLocation());
 
-        assertThat(accountResource.getAccountId()).isNotNull();
-        assertThat(accountResource.getNumber()).isNotNull();
-        assertThat(accountResource.getOwner()).isEqualTo("john.doe@example.com");
-        assertThat(accountResource.getBalance()).isEqualTo(0);
+        assertThat(accountResponse.getStatusCode()).isEqualTo(OK);
+        assertThat(accountResponse.getBody().getAccountId()).isNotNull();
+        assertThat(accountResponse.getBody().getNumber()).isNotNull();
+        assertThat(accountResponse.getBody().getOwner()).isEqualTo("john.doe@example.com");
+        assertThat(accountResponse.getBody().getBalance()).isEqualTo(0);
+    }
+
+    @Test
+    public void delete_account() {
+        String accountId = createAccount();
+
+        ResponseEntity<?> response = restTemplate.exchange("/account/" + accountId, HttpMethod.DELETE, request(), ResponseEntity.class);
+
+        assertThat(response.getStatusCode()).isEqualTo(NO_CONTENT);
+
+        ResponseEntity<AccountResource> account = getAccount(URI.create("/account/" + accountId));
+        assertThat(account.getStatusCode()).isEqualTo(NOT_FOUND);
     }
 
     @Test
@@ -47,21 +68,23 @@ public class AccountControllerTest {
         String accountId = createAccount();
 
         restTemplate.put("/account/" + accountId + "/deposit", request(param("amount", "10")));
+        restTemplate.put("/account/" + accountId + "/deposit", request(param("amount", "5")));
 
-        assertThat(getAccount(accountId).getBalance()).isEqualTo("10");
+        assertThat(getAccount(accountId).getBalance()).isEqualTo("15");
     }
 
     @Test
     public void withdraw_account() {
         String accountId = createAccount();
 
-        restTemplate.put("/account/" + accountId + "/withdraw", request(param("amount", "10"),param("accountId", "123")));
+        restTemplate.put("/account/" + accountId + "/deposit", request(param("amount", "10")));
+        restTemplate.put("/account/" + accountId + "/withdraw", request(param("amount", "5"), param("accountId", "123")));
 
-        assertThat(getAccount(accountId).getBalance()).isEqualTo("-10");
+        assertThat(getAccount(accountId).getBalance()).isEqualTo("5");
     }
 
 
-    private HttpEntity<MultiValueMap<String, Object>> request(RequestParameter ...requestParameter) {
+    private HttpEntity<MultiValueMap<String, Object>> request(RequestParameter... requestParameter) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
@@ -72,8 +95,8 @@ public class AccountControllerTest {
     }
 
 
-    private AccountResource getAccount(URI uri) {
-        return restTemplate.getForObject(uri, AccountResource.class);
+    private ResponseEntity<AccountResource> getAccount(URI uri) {
+        return restTemplate.getForEntity(uri, AccountResource.class);
     }
 
     private RequestParameter param(String name, String value) {
@@ -90,7 +113,7 @@ public class AccountControllerTest {
     }
 
     private String createAccount() {
-        return restTemplate.postForEntity("/account", request(param("owner", "john.doe@example.com")), String.class).getHeaders().getLocation().getQuery();
+        return restTemplate.postForEntity("/account", request(param("owner", "john.doe@example.com")), String.class).getHeaders().getLocation().getPath().split("/")[2];
     }
 
     private class RequestParameter {
