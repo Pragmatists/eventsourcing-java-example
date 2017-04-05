@@ -1,5 +1,6 @@
 package com.pragmatists.application;
 
+import com.pragmatists.domain.BankingService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,8 +22,14 @@ import static org.springframework.web.servlet.support.ServletUriComponentsBuilde
 
 @Controller
 @RequestMapping("/account")
-public class AccountController {
+class AccountController {
 
+
+    private final BankingService bankingService;
+
+    AccountController(BankingService bankingService) {
+        this.bankingService = bankingService;
+    }
 
     @PostMapping
     ResponseEntity<?> createAccount(@RequestParam String owner) {
