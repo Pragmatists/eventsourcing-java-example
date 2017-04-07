@@ -1,5 +1,6 @@
 package com.pragmatists.application;
 
+import com.pragmatists.domain.Account;
 import com.pragmatists.domain.BankingService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -34,18 +35,15 @@ class AccountController {
     @PostMapping
     ResponseEntity<?> createAccount(@RequestParam String owner) {
         String id = UUID.randomUUID().toString();
-        //TODO add saving Account
-
+        bankingService.createAccount(id, owner);
         URI location = fromCurrentRequest().path("/{id}").buildAndExpand(id).toUri();
         return created(location).build();
     }
 
     @GetMapping(path = "/{id}", produces = APPLICATION_JSON_VALUE)
     ResponseEntity<AccountResource> getAccount(@PathVariable String id) {
-        AccountResource accountResource = new AccountResource(id, "", "john.doe@example.com", 0);
-        //TODO add fetching Account
-
-        return ok(accountResource);
+        final Account account = bankingService.loadAccount(id);
+        return ok(new AccountResource(account.getId().getValue(), account.getNumber(), account.getOwner(), account.getBalance()));
     }
 
     @PutMapping(path = "/{id}/withdraw")
