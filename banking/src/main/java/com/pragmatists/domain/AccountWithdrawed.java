@@ -29,6 +29,10 @@ public class AccountWithdrawed implements Event<Account> {
 
     @Override
     public void applyOn(Account account) {
-        account.setBalance(account.getBalance() - amount);
+        account.apply(this);
+    }
+
+    public Integer getAmount() {
+        return amount;
     }
 }

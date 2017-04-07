@@ -27,6 +27,7 @@ public class AccountClosed implements Event<Account> {
 
     @Override
     public void applyOn(Account account) {
-        account.markAsClosed();
+        account.apply(this);
     }
+
 }

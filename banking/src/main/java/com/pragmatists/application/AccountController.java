@@ -1,6 +1,7 @@
 package com.pragmatists.application;
 
 import com.pragmatists.domain.Account;
+import com.pragmatists.domain.AccountClosedException;
 import com.pragmatists.domain.BankingService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -37,7 +38,7 @@ class AccountController {
         try {
             final Account account = bankingService.loadAccount(id);
             return ok(new AccountResource(account.getId().getValue(), account.getNumber(), account.getOwner(), account.getBalance()));
-        } catch (RuntimeException ex) {
+        } catch (AccountClosedException ex) {
             return notFound().build();
         }
     }

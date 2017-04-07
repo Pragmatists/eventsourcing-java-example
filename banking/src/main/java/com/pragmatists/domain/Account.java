@@ -57,10 +57,6 @@ public class Account {
         return balance;
     }
 
-    void setOwner(String owner) {
-        this.owner = owner;
-    }
-
     public int getVersion() {
         return this.version;
     }
@@ -69,20 +65,28 @@ public class Account {
         return closed;
     }
 
-    void setBalance(int newBalance) {
-        this.balance = newBalance;
+    void apply(AccountDeposited accountDeposited) {
+        this.balance += accountDeposited.getAmount();
     }
 
-    void markAsClosed() {
+    void apply(AccountWithdrawed accountWithdrawed) {
+        this.balance -= accountWithdrawed.getAmount();
+    }
+
+    void apply(AccountClosed accountClosed) {
         this.closed = true;
     }
 
-    private void create(String owner) {
-        applyAndAddToChanges(new AccountCreated(this.id, owner));
+    void apply(AccountCreated accountCreated) {
+        this.owner = accountCreated.getOwner();
     }
 
     private void applyAndAddToChanges(Event<Account> event) {
         event.applyOn(this);
         this.changes.add(event);
+    }
+
+    private void create(String owner) {
+        applyAndAddToChanges(new AccountCreated(this.id, owner));
     }
 }

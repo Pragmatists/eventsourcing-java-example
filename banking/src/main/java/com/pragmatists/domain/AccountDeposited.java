@@ -22,6 +22,10 @@ public class AccountDeposited implements Event<Account> {
         return 0;
     }
 
+    public int getAmount() {
+        return amount;
+    }
+
     @Override
     public String getEventType() {
         return getClass().getSimpleName();
@@ -29,7 +33,7 @@ public class AccountDeposited implements Event<Account> {
 
     @Override
     public void applyOn(Account account) {
-        account.setBalance(account.getBalance() + amount);
-
+        account.apply(this);
     }
+
 }

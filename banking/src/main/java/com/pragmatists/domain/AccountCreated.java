@@ -29,7 +29,7 @@ public class AccountCreated implements Event<Account> {
 
     @Override
     public void applyOn(Account account) {
-        account.setOwner(this.owner);
+        account.apply(this);
     }
 
     public String getOwner() {
