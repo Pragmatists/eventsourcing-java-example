@@ -1,18 +1,12 @@
 package com.pragmatists.domain;
 
-import com.pragmatists.eventsourcing.api.Command;
-import com.pragmatists.eventsourcing.api.EventStore;
-
 public class BankingService {
 
-    private final EventStore eventStore;
+    private AccountRepository accountRepository;
 
-    public BankingService(EventStore eventStore) {
-        this.eventStore = eventStore;
-    }
+    public BankingService(AccountRepository accountRepository) {
 
-    public void handle(Command command){
-
+        this.accountRepository = accountRepository;
     }
 
 }

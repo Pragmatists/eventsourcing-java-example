@@ -1,6 +1,7 @@
 package com.pragmatists.application;
 
 
+import com.pragmatists.domain.AccountRepository;
 import com.pragmatists.domain.BankingService;
 import com.pragmatists.eventsourcing.memory.InMemoryEventStore;
 import org.springframework.context.annotation.Bean;
@@ -11,7 +12,8 @@ class BankingConfig {
 
     @Bean
     BankingService bankingService(){
-        return new BankingService(new InMemoryEventStore<>());
+        AccountRepository accountRepository = new AccountRepository(new InMemoryEventStore<>());
+        return new BankingService(accountRepository);
     }
     @Bean
     AccountController accountController(){
