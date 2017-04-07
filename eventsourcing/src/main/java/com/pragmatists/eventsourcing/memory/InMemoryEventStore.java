@@ -10,15 +10,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class InMemoryEventStore<V> implements EventStore {
+public class InMemoryEventStore<T> implements EventStore<T> {
 
-    private Map<AggregateId, EventStream> events = new HashMap<>();
+    private Map<AggregateId, EventStream<T>> events = new HashMap<>();
 
-    public EventStream loadEventStream(AggregateId aggregateId) {
+    public EventStream<T> loadEventStream(AggregateId aggregateId) {
         return events.get(aggregateId);
     }
 
-    public void store(AggregateId aggregateId, long version, List<Event> changes) {
+    public void store(AggregateId aggregateId, long version, List<Event<T>> changes) {
         events.computeIfAbsent(aggregateId, id -> InMemoryEventStream.empty()).addAll(changes);
     }
 

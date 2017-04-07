@@ -8,16 +8,16 @@ import java.util.Iterator;
 import java.util.List;
 
 
-public class InMemoryEventStream implements EventStream {
+public class InMemoryEventStream<T> implements EventStream<T> {
 
     private final long version;
-    private final List<Event> events;
+    private final List<Event<T>> events;
 
-    public static InMemoryEventStream empty() {
-        return new InMemoryEventStream(new ArrayList<>());
+    public static <T> InMemoryEventStream<T> empty() {
+        return new InMemoryEventStream<T>(new ArrayList<>());
     }
 
-    private InMemoryEventStream(List<Event> events) {
+    private InMemoryEventStream(List<Event<T>> events) {
         this.version = 0;
         this.events = events;
     }
@@ -27,11 +27,11 @@ public class InMemoryEventStream implements EventStream {
     }
 
     @Override
-    public void addAll(List<Event> changes) {
+    public void addAll(List<Event<T>> changes) {
         events.addAll(changes);
     }
 
-    public Iterator<Event> iterator() {
+    public Iterator<Event<T>> iterator() {
         return events.iterator();
     }
 }

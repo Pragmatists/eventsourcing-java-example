@@ -48,12 +48,12 @@ class AccountController {
 
     @PutMapping(path = "/{id}/withdraw")
     void withdraw(@PathVariable String id, @RequestParam String amount) {
-        //TODO add withdraw functionality
+        bankingService.withdraw(id, amount);
     }
 
     @PutMapping(path = "/{id}/deposit")
-    void deposit(@PathVariable String id, @RequestParam String amount, @RequestParam String accountId) {
-        //TODO add deposit functionality
+    void deposit(@PathVariable String id, @RequestParam String amount) {
+        bankingService.deposit(id, amount);
     }
 
     @DeleteMapping(path = "/{id}")

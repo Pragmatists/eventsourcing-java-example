@@ -70,7 +70,7 @@ public class AccountControllerTest {
         restTemplate.put("/account/" + accountId + "/deposit", request(param("amount", "10")));
         restTemplate.put("/account/" + accountId + "/deposit", request(param("amount", "5")));
 
-        assertThat(getAccount(accountId).getBalance()).isEqualTo("15");
+        assertThat(getAccount(accountId).getBalance()).isEqualTo(15);
     }
 
     @Test
@@ -80,7 +80,7 @@ public class AccountControllerTest {
         restTemplate.put("/account/" + accountId + "/deposit", request(param("amount", "10")));
         restTemplate.put("/account/" + accountId + "/withdraw", request(param("amount", "5"), param("accountId", "123")));
 
-        assertThat(getAccount(accountId).getBalance()).isEqualTo("5");
+        assertThat(getAccount(accountId).getBalance()).isEqualTo(5);
     }
 
 

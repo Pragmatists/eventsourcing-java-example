@@ -18,9 +18,9 @@ public class AccountRepository {
     }
 
     public Account load(AccountId accountId) {
-        final EventStream events = eventStore.loadEventStream(accountId);
+        final EventStream<Account> events = eventStore.loadEventStream(accountId);
         final Account account = new Account(accountId);
-        account.applyEvents(events);
+        events.forEach(event -> event.applyOn(account));
         return account;
     }
 }

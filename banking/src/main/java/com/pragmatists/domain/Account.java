@@ -2,7 +2,6 @@ package com.pragmatists.domain;
 
 
 import com.pragmatists.eventsourcing.api.Event;
-import com.pragmatists.eventsourcing.api.EventStream;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,21 +12,32 @@ public class Account {
     private final AccountId id;
     private int version = 0;
     private String owner;
+    private int balance;
 
     protected Account(AccountId accountId) {
         this.id = accountId;
     }
 
-    public static Account create(String id, String owner) {
+    public static Account createAccount(String id, String owner) {
         final Account account = new Account(new AccountId(id));
-        account.createInternal(owner);
+        account.create(owner);
         return account;
     }
 
-    private void createInternal(String owner) {
-        final AccountCreated accountCreated = new AccountCreated(this.id, owner);
-        apply(accountCreated);
-        changes.add(accountCreated);
+    public void withdraw(Integer amount) {
+        applyAndAddToChanges(new AccountWithdrawed(amount));
+    }
+
+    public void deposit(int amount) {
+        applyAndAddToChanges(new AccountDeposited(amount));
+    }
+
+    List<Event> getChanges() {
+        return new ArrayList<>(changes);
+    }
+
+    public String getOwner() {
+        return owner;
     }
 
     public AccountId getId() {
@@ -38,35 +48,28 @@ public class Account {
         return id.getValue();
     }
 
-    List<Event> getChanges() {
-        return new ArrayList<>(changes);
+    public int getBalance() {
+        return balance;
+    }
+
+    void setOwner(String owner) {
+        this.owner = owner;
     }
 
     public int getVersion() {
         return this.version;
     }
 
-    public void applyEvents(EventStream events) {
-        for (Event event : events) {
-            apply(event);
-        }
+    void setBalance(int newBalance) {
+        this.balance = newBalance;
     }
 
-    private void apply(Event event) {
-        if (event.getEventType().equals("AccountCreated")) {
-            apply((AccountCreated) event);
-        }
+    private void create(String owner) {
+        applyAndAddToChanges(new AccountCreated(this.id, owner));
     }
 
-    private void apply(AccountCreated event) {
-        this.owner = event.getOwner();
-    }
-
-    public String getOwner() {
-        return owner;
-    }
-
-    public Integer getBalance() {
-        return 0;
+    private void applyAndAddToChanges(Event<Account> event) {
+        event.applyOn(this);
+        this.changes.add(event);
     }
 }
