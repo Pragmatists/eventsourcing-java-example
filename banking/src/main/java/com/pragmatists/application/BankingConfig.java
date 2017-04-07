@@ -12,7 +12,7 @@ class BankingConfig {
 
     @Bean
     BankingService bankingService(){
-        AccountRepository accountRepository = new AccountRepository(new InMemoryEventStore<>());
+        AccountRepository accountRepository = new AccountRepository(new InMemoryEventStore());
         return new BankingService(accountRepository);
     }
     @Bean

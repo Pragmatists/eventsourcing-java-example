@@ -3,21 +3,18 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
+	<parent>
+		<groupId>com.pragmatists</groupId>
+		<artifactId>banking-eventsourcing</artifactId>
+		<version>1.0-SNAPSHOT</version>
+	</parent>
 
 	<groupId>com.pragmatists</groupId>
 	<artifactId>banking</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>banking</name>
 	<description>Demo project for Event Sourcing</description>
-
-	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>1.5.2.RELEASE</version>
-		<relativePath/> <!-- lookup parent from repository -->
-	</parent>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -30,17 +27,19 @@
 		<dependency>
 			<groupId>com.pragmatists</groupId>
 			<artifactId>eventsourcing</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>${pom.parent.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+			<version>1.5.2.RELEASE</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
+			<version>1.5.2.RELEASE</version>
 		</dependency>
 		<dependency>
 			<groupId>com.jayway.restassured</groupId>
