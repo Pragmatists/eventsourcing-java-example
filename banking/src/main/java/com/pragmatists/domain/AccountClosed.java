@@ -3,13 +3,11 @@ package com.pragmatists.domain;
 import com.pragmatists.eventsourcing.api.AggregateId;
 import com.pragmatists.eventsourcing.api.Event;
 
-public class AccountDeposited implements Event<Account> {
-    private final int amount;
+public class AccountClosed implements Event<Account> {
     private final AggregateId aggregateId;
 
-    public AccountDeposited(AggregateId aggregateId, int amount) {
+    public AccountClosed(AggregateId aggregateId) {
         this.aggregateId = aggregateId;
-        this.amount = amount;
     }
 
     @Override
@@ -29,7 +27,6 @@ public class AccountDeposited implements Event<Account> {
 
     @Override
     public void applyOn(Account account) {
-        account.setBalance(account.getBalance() + amount);
-
+        account.markAsClosed();
     }
 }

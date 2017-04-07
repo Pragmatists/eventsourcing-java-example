@@ -15,7 +15,11 @@ public class BankingService {
     }
 
     public Account loadAccount(String accountId) {
-        return accountRepository.load(new AccountId(accountId));
+        final Account account = accountRepository.load(new AccountId(accountId));
+        if (account.isClosed()) {
+            throw new AccountClosedException(new AccountId(accountId));
+        }
+        return account;
     }
 
     public void deposit(String id, String amount) {
@@ -27,6 +31,12 @@ public class BankingService {
     public void withdraw(String id, String amount) {
         final Account account = accountRepository.load(new AccountId(id));
         account.withdraw(Integer.valueOf(amount));
+        accountRepository.store(account);
+    }
+
+    public void closeAccount(String id) {
+        final Account account = accountRepository.load(new AccountId(id));
+        account.close();
         accountRepository.store(account);
     }
 }

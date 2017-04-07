@@ -13,6 +13,7 @@ public class Account {
     private int version = 0;
     private String owner;
     private int balance;
+    private boolean closed;
 
     protected Account(AccountId accountId) {
         this.id = accountId;
@@ -25,11 +26,15 @@ public class Account {
     }
 
     public void withdraw(Integer amount) {
-        applyAndAddToChanges(new AccountWithdrawed(amount));
+        applyAndAddToChanges(new AccountWithdrawed(id, amount));
     }
 
     public void deposit(int amount) {
-        applyAndAddToChanges(new AccountDeposited(amount));
+        applyAndAddToChanges(new AccountDeposited(id, amount));
+    }
+
+    public void close() {
+        applyAndAddToChanges(new AccountClosed(id));
     }
 
     List<Event> getChanges() {
@@ -60,8 +65,16 @@ public class Account {
         return this.version;
     }
 
+    public boolean isClosed() {
+        return closed;
+    }
+
     void setBalance(int newBalance) {
         this.balance = newBalance;
+    }
+
+    void markAsClosed() {
+        this.closed = true;
     }
 
     private void create(String owner) {
