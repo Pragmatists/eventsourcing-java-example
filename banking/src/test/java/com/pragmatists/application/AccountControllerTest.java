@@ -1,5 +1,6 @@
 package com.pragmatists.application;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -70,7 +72,7 @@ public class AccountControllerTest {
         restTemplate.put("/account/" + accountId + "/deposit", request(param("amount", "10")));
         restTemplate.put("/account/" + accountId + "/deposit", request(param("amount", "5")));
 
-        assertThat(getAccount(accountId).getBalance()).isEqualTo("15");
+        assertThat(getAccount(accountId).getBalance()).isEqualTo(15);
     }
 
     @Test
@@ -80,7 +82,7 @@ public class AccountControllerTest {
         restTemplate.put("/account/" + accountId + "/deposit", request(param("amount", "10")));
         restTemplate.put("/account/" + accountId + "/withdraw", request(param("amount", "5"), param("accountId", "123")));
 
-        assertThat(getAccount(accountId).getBalance()).isEqualTo("5");
+        assertThat(getAccount(accountId).getBalance()).isEqualTo(5);
     }
 
 

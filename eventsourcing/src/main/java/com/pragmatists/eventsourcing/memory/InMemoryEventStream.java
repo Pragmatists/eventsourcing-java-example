@@ -6,23 +6,24 @@ import com.pragmatists.eventsourcing.api.EventStream;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Stream;
 
 
-public class InMemoryEventStream<V> implements EventStream<V> {
+public class InMemoryEventStream implements EventStream {
 
     private final long version;
-    private final List<Event> events;
+    private Stream<Event> stream;
 
-    public InMemoryEventStream() {
+    public InMemoryEventStream(Stream<Event> stream) {
+        this.stream = stream;
         this.version = 0;
-        events = Collections.emptyList();
     }
 
-    public V version() {
-        return null;
+    public long version() {
+        return 0;
     }
 
     public Iterator<Event> iterator() {
-        return null;
+        return stream.iterator();
     }
 }
