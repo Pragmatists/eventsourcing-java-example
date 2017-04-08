@@ -2,15 +2,16 @@ package com.pragmatists.application;
 
 
 public class AccountResource {
+
     private String accountId;
     private String number;
     private String owner;
-    private Integer balance;
+    private String balance;
 
     public AccountResource() {
     }
 
-    public AccountResource(String accountId, String number, String owner, Integer balance) {
+    public AccountResource(String accountId, String number, String owner, String balance) {
         this.accountId = accountId;
         this.number = number;
         this.owner = owner;
@@ -29,7 +30,7 @@ public class AccountResource {
         return owner;
     }
 
-    public Integer getBalance() {
+    public String getBalance() {
         return balance;
     }
 }

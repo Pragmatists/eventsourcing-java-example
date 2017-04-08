@@ -48,7 +48,7 @@ public class AccountControllerTest {
         assertThat(accountResponse.getBody().getAccountId()).isNotNull();
         assertThat(accountResponse.getBody().getNumber()).isNotNull();
         assertThat(accountResponse.getBody().getOwner()).isEqualTo("john.doe@example.com");
-        assertThat(accountResponse.getBody().getBalance()).isEqualTo(0);
+        assertThat(accountResponse.getBody().getBalance()).isEqualTo("0");
     }
 
     @Test

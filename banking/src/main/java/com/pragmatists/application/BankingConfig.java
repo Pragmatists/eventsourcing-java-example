@@ -11,13 +11,18 @@ import org.springframework.context.annotation.Configuration;
 class BankingConfig {
 
     @Bean
-    BankingService bankingService(){
-        AccountRepository accountRepository = new AccountRepository(new InMemoryEventStore<>());
+    BankingService bankingService(AccountRepository accountRepository) {
         return new BankingService(accountRepository);
     }
+    
     @Bean
-    AccountController accountController(){
-        return new AccountController(bankingService());
+    AccountController accountController(BankingService bankingService, AccountRepository accountRepository) {
+        return new AccountController(bankingService, accountRepository);
+    }
+
+    @Bean
+    AccountRepository accountRepository() {
+        return new AccountRepository(new InMemoryEventStore<>());
     }
 
 }

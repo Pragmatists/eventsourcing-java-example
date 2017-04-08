@@ -3,8 +3,8 @@ package com.pragmatists.eventsourcing.api;
 
 import java.util.List;
 
-public interface EventStore<V> {
-    EventStream<Long> loadEventStream(AggregateId aggregateId);
-    void store(AggregateId aggregateId, long version, List<Event> events);
+public interface EventStore<A, I extends AggregateId> {
+    EventStream<A, I> loadEventStream(I aggregateId);
+    void store(I aggregateId, long version, List<Event<A, I>> events);
 
 }
