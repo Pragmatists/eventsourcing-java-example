@@ -7,7 +7,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -17,10 +16,9 @@ import org.springframework.util.MultiValueMap;
 import java.net.URI;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
-import static org.springframework.http.HttpStatus.NO_CONTENT;
-import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.HttpMethod.DELETE;
+import static org.springframework.http.HttpMethod.PUT;
+import static org.springframework.http.HttpStatus.*;
 
 
 @RunWith(SpringRunner.class)
@@ -55,7 +53,7 @@ public class AccountControllerTest {
     public void delete_account() {
         String accountId = createAccount();
 
-        ResponseEntity<?> response = restTemplate.exchange("/account/" + accountId, HttpMethod.DELETE, request(), ResponseEntity.class);
+        ResponseEntity<?> response = closeAccount(accountId);
 
         assertThat(response.getStatusCode()).isEqualTo(NO_CONTENT);
 
@@ -67,22 +65,51 @@ public class AccountControllerTest {
     public void deposit_account() {
         String accountId = createAccount();
 
-        restTemplate.put("/account/" + accountId + "/deposit", request(param("amount", "10")));
-        restTemplate.put("/account/" + accountId + "/deposit", request(param("amount", "5")));
+        deposit(accountId, "10");
+        deposit(accountId, "5");
 
-        assertThat(getAccount(accountId).getBalance()).isEqualTo("15");
+        assertThat(getAccount(accountId).getBalance()).isEqualTo(15);
     }
 
     @Test
     public void withdraw_account() {
         String accountId = createAccount();
 
-        restTemplate.put("/account/" + accountId + "/deposit", request(param("amount", "10")));
-        restTemplate.put("/account/" + accountId + "/withdraw", request(param("amount", "5"), param("accountId", "123")));
+        deposit(accountId, "10");
+        withdraw(accountId, "5");
 
-        assertThat(getAccount(accountId).getBalance()).isEqualTo("5");
+        assertThat(getAccount(accountId).getBalance()).isEqualTo(5);
     }
 
+    @Test
+    public void cannot_withdraw_closed_account() {
+        String accountId = createAccount();
+        closeAccount(accountId);
+
+        ResponseEntity<String> responseEntity = withdraw(accountId, "5");
+
+        assertThat(responseEntity.getStatusCode()).isEqualTo(NOT_FOUND);
+    }
+
+    @Test
+    public void cannot_withdraw_account_when_not_enought_money() {
+        String accountId = createAccount();
+
+        deposit(accountId, "5");
+        ResponseEntity<String> responseEntity = withdraw(accountId, "10");
+
+        assertThat(responseEntity.getStatusCode()).isEqualTo(NOT_FOUND);
+        assertThat(getAccount(accountId).getBalance()).isEqualTo(5);
+    }
+
+
+    private void deposit(String accountId, String value) {
+        restTemplate.put("/account/" + accountId + "/deposit", request(param("amount", value)));
+    }
+
+    private ResponseEntity<String> withdraw(String accountId, String value) {
+        return restTemplate.exchange("/account/" + accountId + "/withdraw", PUT, request(param("amount", value)), String.class);
+    }
 
     private HttpEntity<MultiValueMap<String, Object>> request(RequestParameter... requestParameter) {
         HttpHeaders headers = new HttpHeaders();
@@ -92,6 +119,11 @@ public class AccountControllerTest {
             map.add(parameter.name, parameter.value);
         }
         return new HttpEntity<>(map, headers);
+    }
+
+
+    private ResponseEntity<ResponseEntity> closeAccount(String accountId) {
+        return restTemplate.exchange("/account/" + accountId, DELETE, request(), ResponseEntity.class);
     }
 
 

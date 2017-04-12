@@ -1,6 +1,6 @@
 package com.pragmatists.eventsourcing.api;
 
 
-public interface EventStream<V> extends Iterable<Event> {
-    V version();
+public interface EventStream extends Iterable<Event> {
+    long version();
 }

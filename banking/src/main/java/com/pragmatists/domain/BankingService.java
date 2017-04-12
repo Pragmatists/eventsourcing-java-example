@@ -2,11 +2,11 @@ package com.pragmatists.domain;
 
 public class BankingService {
 
-    private AccountRepository accountRepository;
+    private AccountRepository accounts;
 
-    public BankingService(AccountRepository accountRepository) {
+    public BankingService(AccountRepository accounts) {
 
-        this.accountRepository = accountRepository;
+        this.accounts = accounts;
     }
 
 }

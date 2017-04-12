@@ -8,9 +8,9 @@ import com.pragmatists.eventsourcing.api.EventStream;
 
 import java.util.List;
 
-public class InMemoryEventStore<V> implements EventStore<V> {
+public class InMemoryEventStore implements EventStore {
 
-    public EventStream<Long> loadEventStream(AggregateId aggregateId) {
+    public EventStream loadEventStream(AggregateId aggregateId) {
         return null;
     }
 
