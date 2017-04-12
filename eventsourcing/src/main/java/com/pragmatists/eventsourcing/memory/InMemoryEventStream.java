@@ -3,16 +3,17 @@ package com.pragmatists.eventsourcing.memory;
 import com.pragmatists.eventsourcing.api.Event;
 import com.pragmatists.eventsourcing.api.EventStream;
 
+import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.stream.Stream;
+import java.util.List;
 
 
 public class InMemoryEventStream implements EventStream {
 
     private final long version;
-    private Stream<Event> stream;
+    private final List<Event> stream;
 
-    public InMemoryEventStream(Stream<Event> stream) {
+    public InMemoryEventStream(List<Event> stream) {
         this.stream = stream;
         this.version = 0;
     }
@@ -23,5 +24,14 @@ public class InMemoryEventStream implements EventStream {
 
     public Iterator<Event> iterator() {
         return stream.iterator();
+    }
+
+    public static InMemoryEventStream empty() {
+        return new InMemoryEventStream(new ArrayList<>());
+    }
+
+    @Override
+    public void addAll(List<Event> changes) {
+        stream.addAll(changes);
     }
 }

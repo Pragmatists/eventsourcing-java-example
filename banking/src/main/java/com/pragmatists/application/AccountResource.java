@@ -1,6 +1,8 @@
 package com.pragmatists.application;
 
 
+import com.pragmatists.domain.AccountId;
+
 public class AccountResource {
     private String accountId;
     private String number;
@@ -10,11 +12,12 @@ public class AccountResource {
     public AccountResource() {
     }
 
-    public AccountResource(String accountId, String number, String owner, Integer balance) {
-        this.accountId = accountId;
+    public AccountResource(AccountId id, String number, String owner, Integer balance) {
+        this.accountId = id.toString();
         this.number = number;
         this.owner = owner;
         this.balance = balance;
+
     }
 
     public String getAccountId() {
