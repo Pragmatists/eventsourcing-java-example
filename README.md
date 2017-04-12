@@ -11,9 +11,9 @@ Example in-memory Event Sourcing use implementation for banking domain.
 - Implement [Unit of Work](https://martinfowler.com/eaaCatalog/unitOfWork.html) pattern where events are stored outside of aggregate
 
 ## exercise 1b (optional)
+- Implement Projections on Account to get number of transactions performed on account
 - eventStore.store() method shoud accept Event playload instead of domain Events
 - what should be api of eventStream()?
-- Implement Projections on Account to get number of transactions performed on account
 
 ## excercise 2
 - add optimistic locking
