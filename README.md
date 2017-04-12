@@ -7,7 +7,7 @@ Example in-memory Event Sourcing use implementation for banking domain.
 - Provide simple in-memory implementation of Event Store
 - Make all test passing using event sourcing
 ### soultion
- - branch [exercise_1_solution](https://github.com/michal-lipski/eventsourcing-example/edit/exercise_1_solution)
+ - branch [exercise_1_solution](https://github.com/michal-lipski/eventsourcing-example/tree/excercise_1_solution)
 
 ## excercise 1a (optional)
 - Implement [Unit of Work](https://martinfowler.com/eaaCatalog/unitOfWork.html) pattern where events are stored outside of aggregate
