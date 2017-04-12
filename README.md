@@ -11,14 +11,19 @@ Example in-memory Event Sourcing use implementation for banking domain.
 - Implement [Unit of Work](https://martinfowler.com/eaaCatalog/unitOfWork.html) pattern where events are stored outside of aggregate
 
 ## exercise 1b (optional)
+- eventStore.store() method shoud accept Event playload instead of domain Events
+- what should be api of eventStream()?
 - Implement Projections on Account to get number of transactions performed on account
 
-## exercise 2
+## excercise 2
+- add optimistic locking
+
+## exercise 3
 ![alt tag](https://raw.githubusercontent.com/michal-lipski/eventsourcing-example/master/event_store_exercise_2.png)
 - Refactor to move all money transfer related stuff to separate aggregate
 - New aggregate will be also using Event Store
 
-## exercise 3
+## exercise 4
 ![alt tag](https://raw.githubusercontent.com/michal-lipski/eventsourcing-example/master/event_store_exercise_3.png)
 - Apply CQRS rule and separate the command and reading side
 - Solution will use Eventual Consistency approach
