@@ -8,7 +8,7 @@ Example in-memory Event Sourcing use implementation for banking domain.
 - Make all test passing using event sourcing 
 
 ## excercise 1a (optional)
-- Implement [Unit of Work](https://martinfowler.com/eaaCatalog/unitOfWork.html) pattern
+- Implement [Unit of Work](https://martinfowler.com/eaaCatalog/unitOfWork.html) pattern where events are stored outside of aggregate
 
 ## exercise 1b (optional)
 - Implement Projections on Account to get number of transactions performed on account
