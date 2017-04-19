@@ -1,4 +1,4 @@
-# eventsourcing-example
+# Event sourcing example in Java
 An simplified (in memory) example of Event Sourcing implementation in Java for banking domain.
 Repository is splitted into excercises adding step by step more functionality towards good design of event sourcing with CQRS.
 You can play around and try to implement excercises or You can check solution branches.
@@ -19,7 +19,7 @@ You can play around and try to implement excercises or You can check solution br
 - eventStore.store() method shoud accept Event playload instead of domain Events
 - what should be api of eventStream()?
 
-## excercise 2
+## excercise 2 (optional)
 - add optimistic locking
 
 ## exercise 3
