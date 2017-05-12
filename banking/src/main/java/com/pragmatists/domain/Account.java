@@ -8,7 +8,7 @@ import java.util.List;
 
 public class Account {
 
-    private List<Event> changes = new ArrayList<>();
+    private List<Event<Account>> changes = new ArrayList<>();
     private final AccountId id;
     private int version = 0;
     private String owner;
@@ -37,7 +37,7 @@ public class Account {
         applyAndAddToChanges(new AccountClosed(id));
     }
 
-    List<Event> getChanges() {
+    List<Event<Account>> getChanges() {
         return new ArrayList<>(changes);
     }
 

@@ -1,15 +1,14 @@
 package com.pragmatists.domain;
 
 
-import com.pragmatists.eventsourcing.api.Event;
 import com.pragmatists.eventsourcing.api.EventStore;
 import com.pragmatists.eventsourcing.api.EventStream;
 
 public class AccountRepository {
 
-    private final EventStore eventStore;
+    private final EventStore<Account> eventStore;
 
-    public AccountRepository(EventStore eventStore) {
+    public AccountRepository(EventStore<Account> eventStore) {
         this.eventStore = eventStore;
     }
 
