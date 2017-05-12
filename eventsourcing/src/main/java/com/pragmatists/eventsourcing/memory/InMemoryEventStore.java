@@ -18,7 +18,7 @@ public class InMemoryEventStore<T> implements EventStore<T> {
         return events.get(aggregateId);
     }
 
-    public void store(AggregateId aggregateId, long version, List<Event<T>> changes) {
+    public void store(AggregateId aggregateId, long expectedVersion, List<Event<T>> changes) {
         events.computeIfAbsent(aggregateId, id -> InMemoryEventStream.empty()).addAll(changes);
     }
 
