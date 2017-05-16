@@ -3,14 +3,18 @@ package com.pragmatists.domain;
 import com.pragmatists.eventsourcing.api.AggregateId;
 import com.pragmatists.eventsourcing.api.Event;
 
+import java.time.LocalDate;
 
-public class AccountWithdrawed implements Event<Account>{
+
+public class AccountWithdrawn implements Event<Account> {
     private final AccountId id;
     private Integer amount;
+    private final LocalDate date;
 
-    public AccountWithdrawed(AccountId id, Integer amount) {
+    public AccountWithdrawn(AccountId id, Integer amount, LocalDate date) {
         this.id = id;
         this.amount = amount;
+        this.date = date;
     }
 
     public Integer getAmount() {
@@ -30,6 +34,10 @@ public class AccountWithdrawed implements Event<Account>{
     @Override
     public String getEventType() {
         return null;
+    }
+
+    public LocalDate getDate() {
+        return date;
     }
 
     @Override

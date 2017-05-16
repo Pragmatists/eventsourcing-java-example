@@ -1,6 +1,8 @@
 package com.pragmatists.eventsourcing.api;
 
 
+import java.time.LocalDate;
+
 public interface Event<T> {
     AggregateId getAggregateId();
 
@@ -9,4 +11,6 @@ public interface Event<T> {
     String getEventType();
 
     void applyOn(T account);
+
+    LocalDate getDate();
 }

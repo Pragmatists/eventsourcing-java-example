@@ -9,6 +9,8 @@ import com.pragmatists.eventsourcing.api.EventStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
+import java.util.stream.StreamSupport;
 
 public class InMemoryEventStore implements EventStore {
 
@@ -16,6 +18,15 @@ public class InMemoryEventStore implements EventStore {
 
     public EventStream loadEventStream(AggregateId aggregateId) {
         return events.get(aggregateId);
+    }
+
+    @Override
+    public EventStream loadEventStream(Predicate<Event> predicate) {
+        return new InMemoryEventStream(
+                events.values().stream()
+                        .flatMap(es -> StreamSupport.stream(es.spliterator(), false))
+                        .filter(predicate)
+        );
     }
 
     public void store(AggregateId aggregateId, long version, List<Event> changes) {

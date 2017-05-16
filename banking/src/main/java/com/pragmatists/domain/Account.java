@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import static java.time.LocalDate.now;
+
 public class Account {
 
     private AccountId id;
@@ -33,8 +35,8 @@ public class Account {
         this.balance += accountDeposited.getAmount();
     }
 
-    void apply(AccountWithdrawed accountWithdrawed) {
-        this.balance -= accountWithdrawed.getAmount();
+    void apply(AccountWithdrawn accountWithdrawn) {
+        this.balance -= accountWithdrawn.getAmount();
     }
 
     void apply(AccountClosed accountClosed) {
@@ -51,23 +53,23 @@ public class Account {
         this.number = UUID.randomUUID().toString();
         this.balance = 0;
 
-        changes.add(new AccountCreated(id, owner, number));
+        changes.add(new AccountCreated(id, owner, number, now()));
         return this;
     }
 
     public void deposit(Integer value) {
         this.balance += value;
-        changes.add(new AccountDeposited(id, value));
+        changes.add(new AccountDeposited(id, value, now()));
     }
 
     public void withdraw(Integer value) {
         this.balance -= value;
-        changes.add(new AccountWithdrawed(id, value));
+        changes.add(new AccountWithdrawn(id, value, now()));
     }
 
     public void close() {
         this.closed = true;
-        changes.add(new AccountClosed(id));
+        changes.add(new AccountClosed(id, now()));
     }
 
     public boolean isClosed() {
